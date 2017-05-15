@@ -5,6 +5,7 @@
 namespace latbolt{}
 
 //includes go here
+#include "fluid.h"
 
 
 #endif

@@ -1,5 +1,6 @@
 #include "fluid.h"
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -35,7 +36,7 @@ void fluid::collide_and_stream() {
     static double omega_p = 1 - omega;
 
     for (int i = 1; i < Nx-1; i++) {
-        for (int j = 1; i < Ny-1; j++) {
+        for (int j = 1; j < Ny-1; j++) {
             for (int k = 0; k < Nv; k++) {
                 // equilibrium
                 double fi_eq = wi[k]*rho(i,j) * (1 + cs2*(Ux(i,j)*cix[k] + Uy(i,j)*ciy[k])
@@ -58,9 +59,9 @@ void fluid::collide_and_stream() {
 
 void fluid::update_macroscopic() {
     for (int i = 0; i < Nx; i++) {
-        for (int j = 0; i < Ny; j++) {
+        for (int j = 0; j < Ny; j++) {
             rho(i,j) = fi(i,j,0) + fi(i,j,1) + fi(i,j,2) + fi(i,j,3) + fi(i,j,4)
-                       + fi(i,j,5) + fi(i,j,6) + fi(i,j,7) + fi(i,j,8) + fi(i,j,9);
+                       + fi(i,j,5) + fi(i,j,6) + fi(i,j,7) + fi(i,j,8);
 
             Ux(i,j) = 1/rho(i,j) * (fi(i,j,1) + fi(i,j,5) + fi(i,j,8)
                                     - fi(i,j,4) - fi(i,j,6) - fi(i,j,7));
@@ -77,7 +78,7 @@ void fluid::update() {
 
     // apply boundary conditions here
     
-    t += t;
+    t += dt;
 
     // force computation here
 }
@@ -96,9 +97,9 @@ void fluid::write_U() {
 }
 
 void fluid::init_file() {
-    vector<hsize_t> dims = {hsize_t(Nx),hsize_t(Ny),1};
+    vector<hsize_t> dims = {hsize_t(Nx),hsize_t(Ny),0};
     vector<hsize_t> max_dims = {hsize_t(Nx),hsize_t(Ny),h5cpp::inf};
-    vector<hsize_t> chunk_dims = dims;
+    vector<hsize_t> chunk_dims = {hsize_t(Nx),hsize_t(Ny),1};
     h5cpp::dspace ds(dims, max_dims, chunk_dims, false);
 
     auto dset = outFile.create_dataset("rho", h5cpp::dtype::Double, ds);
