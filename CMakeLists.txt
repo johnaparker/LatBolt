@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5.2)
-project(PROJECT)
+project(latbolt)
 #set(CMAKE_BUILD_TYPE DEBUG)
 enable_testing()
  
@@ -40,10 +40,10 @@ file(GLOB MAIN_HEADERS "include/*.h" )
 #file(GLOB SUB_HEADERS "include/sub/*.h")
  
 #Generate the shared library from the sources
-add_library(PROJECT SHARED ${SOURCES})
+add_library(latbolt SHARED ${SOURCES})
  
 #Build executable
-set (PROJECT_LINK_LIBS PROJECT ${h5cpp_lib} ${h5_lib})
+set (PROJECT_LINK_LIBS latbolt ${h5cpp_lib} ${h5_lib})
 link_directories( build )
 
 add_executable(main tests/main.cpp)
@@ -52,7 +52,7 @@ add_test(test1 main)
 
 
 #Set the location for library installation
-install(TARGETS PROJECT DESTINATION lib)
-install(FILES ${MAIN_HEADERS} DESTINATION include/PROJECT)
-#install(FILES ${SUB_HEADERS} DESTINATION include/PROJECT/sub)
-install(FILES include/PROJECT.h DESTINATION include)
+install(TARGETS latbolt DESTINATION lib)
+install(FILES ${MAIN_HEADERS} DESTINATION include/latbolt)
+#install(FILES ${SUB_HEADERS} DESTINATION include/latbolt/sub)
+install(FILES include/latbolt.h DESTINATION include)

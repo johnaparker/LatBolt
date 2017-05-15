@@ -1,6 +1,6 @@
-PROJECT
+latbolt
 ==============
 
 License
 --------------
-PROJECT is licensed under the terms of the MIT license.
+latbolt is licensed under the terms of the MIT license.

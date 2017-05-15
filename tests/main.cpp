@@ -1,8 +1,8 @@
-#include <PROJECT.h>
+#include <latbolt.h>
 #include <iostream>
 
 using namespace std;
-using namespace PROJECT;
+using namespace latbolt;
 
 int main() {
 
