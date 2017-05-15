@@ -1,0 +1,31 @@
+//swap files
+*.sw?
+
+//out files
+*.out
+*.dat
+
+//object files
+*.o
+
+//figures
+figs/*
+
+//executables
+a.out
+
+//build directory
+build/
+
+//tags
+tags
+
+//docs
+docs/html
+docs/latex
+
+*.gch
+
+//h5 files
+*.h5
+
