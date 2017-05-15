@@ -19,14 +19,16 @@ public:
 private:
     int Nx,Ny;
     double tau;             // relaxation
+    double viscosity;       // kinematic shear viscosity
     double dx, dt;
+    double t;
 
     constexpr static int Nv = 9;     // 9 velocities
     constexpr static int cs2 = 3;     // speed^-2
     constexpr static int cs4 = 9;     // speed^-4
 
     tensor3 fi;            // populations
-    tensor3 fi_prev;       // previous populations
+    tensor3 fi_new;       // new populations (temporary storage)
 
     tensor rho;            // density
     tensor Ux;             // velocity field
