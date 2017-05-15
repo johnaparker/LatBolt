@@ -1,4 +1,5 @@
 #include "fluid.h"
+#include <vector>
 
 using namespace std;
 
@@ -11,6 +12,7 @@ fluid::fluid(std::string filename, int Nx, int Ny, double tau): Nx(Nx), Ny(Ny), 
     viscosity = cs2*(tau - dt/2);
 
     outFile = h5cpp::h5file(filename, h5cpp::io::w);
+    init_file();
 
     fi = tensor3(Nx, Ny, Nv);
     fi_new = tensor3(Nx, Ny, Nv);
@@ -72,7 +74,36 @@ void fluid::update_macroscopic() {
 void fluid::update() {
     update_macroscopic();
     collide_and_stream();
+
+    // apply boundary conditions here
+    
     t += t;
+
+    // force computation here
+}
+
+void fluid::write_rho() {
+    auto dset = outFile.open_dataset("rho");
+    dset.append(rho.data());
+}
+
+void fluid::write_U() {
+    auto dset = outFile.open_dataset("Ux");
+    dset.append(Ux.data());
+
+    dset = outFile.open_dataset("Uy");
+    dset.append(Uy.data());
+}
+
+void fluid::init_file() {
+    vector<hsize_t> dims = {hsize_t(Nx),hsize_t(Ny),1};
+    vector<hsize_t> max_dims = {hsize_t(Nx),hsize_t(Ny),h5cpp::inf};
+    vector<hsize_t> chunk_dims = dims;
+    h5cpp::dspace ds(dims, max_dims, chunk_dims, false);
+
+    auto dset = outFile.create_dataset("rho", h5cpp::dtype::Double, ds);
+    dset = outFile.create_dataset("Ux", h5cpp::dtype::Double, ds);
+    dset = outFile.create_dataset("Uy", h5cpp::dtype::Double, ds);
 }
 
 }

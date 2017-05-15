@@ -13,8 +13,13 @@ public:
 
     void collide_and_stream();
     void update_macroscopic();
-
     void update();
+
+    void write_rho();
+    void write_U();
+
+private:
+    void init_file();
 
 private:
     int Nx,Ny;
@@ -39,6 +44,7 @@ private:
     std::array<const int, Nv> ciy = {0, 0, 1, 0, -1, 1, 1, -1, -1};     //weights
 
     h5cpp::h5file outFile;
+
 };
 
 }
