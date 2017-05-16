@@ -39,7 +39,7 @@ private:
     tensor Ux;             // velocity field
     tensor Uy;
 
-    std::array<const double, Nv> wi = {4/9, 1/9, 1/9, 1/9, 1/9, 1/36, 1/36, 1/36, 1/36};     //weights
+    std::array<const double, Nv> wi = {4./9, 1./9, 1./9, 1./9, 1./9, 1./36, 1./36, 1./36, 1./36};     //weights
     std::array<const int, Nv> cix = {0, 1, 0, -1, 0, 1, -1, -1, 1};     //weights
     std::array<const int, Nv> ciy = {0, 0, 1, 0, -1, 1, 1, -1, -1};     //weights
 
