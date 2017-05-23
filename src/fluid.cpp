@@ -26,7 +26,7 @@ fluid::fluid(std::string filename, int Nx, int Ny, double tau): Nx(Nx), Ny(Ny), 
     Ux.setZero();
     Uy.setZero();
 
-    rho(50,50) = 3;
+    //rho(50,50) = 3;
     for (int k = 0; k < Nv; k++)
         fi.chip(k,2) = wi[k] * rho;
     fi_new = fi;
@@ -93,9 +93,27 @@ void fluid::update() {
     collide_and_stream();
 
     // apply boundary conditions here
+    double u_in = 0.01*3;
+    double rho_in = 1.01;
+    for (int j = 0; j < Ny; j++) {
+        // velocity BC
+        //double rho_wall = 1/(1-u_in) * (fi_new(0,j,0) + fi_new(0,j,2) + fi_new(0,j,4)
+                 //+ 2*(fi_new(0,j,3) + fi_new(0,j,6) + fi_new(0,j,7)) );
+        //fi_new(0,j,1) = fi_new(0,j,3);
+        //fi_new(0,j,5) = fi_new(0,j,7) - 0.5*(fi_new(0,j,2) - fi_new(0,j,4)) + 1.0/6*rho_wall*u_in;
+        //fi_new(0,j,8) = fi_new(0,j,6) + 0.5*(fi_new(0,j,2) - fi_new(0,j,4)) + 1.0/6*rho_wall*u_in;
+
+        // pressure BC
+        double ux = 1 - 1/(rho_in) * (fi_new(0,j,0) + fi_new(0,j,2) + fi_new(0,j,4)
+                                 + 2*(fi_new(0,j,3) + fi_new(0,j,6) + fi_new(0,j,7)) );
+        fi_new(0,j,1) = fi_new(0,j,3) + 2/3*rho_in*ux;
+        fi_new(0,j,5) = fi_new(0,j,7) - 0.5*(fi_new(0,j,2) - fi_new(0,j,4)) + 1.0/6*rho_in*ux;
+        fi_new(0,j,8) = fi_new(0,j,6) + 0.5*(fi_new(0,j,2) - fi_new(0,j,4)) + 1.0/6*rho_in*ux;
+
+        //rho(0,j) = rho_wall;
+    }
     
     // copy xmax to xmin, xmin to xmax
-    // stream
     
     fi = fi_new;
     t += dt;
