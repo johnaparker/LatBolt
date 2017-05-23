@@ -95,6 +95,7 @@ void fluid::update() {
     // apply boundary conditions here
     double u_in = 0.01*3;
     double rho_in = 1.01;
+    double rho_out = 0.99;
     for (int j = 0; j < Ny; j++) {
         // velocity BC
         //double rho_wall = 1/(1-u_in) * (fi_new(0,j,0) + fi_new(0,j,2) + fi_new(0,j,4)
@@ -110,9 +111,30 @@ void fluid::update() {
         fi_new(0,j,5) = fi_new(0,j,7) - 0.5*(fi_new(0,j,2) - fi_new(0,j,4)) + 1.0/6*rho_in*ux;
         fi_new(0,j,8) = fi_new(0,j,6) + 0.5*(fi_new(0,j,2) - fi_new(0,j,4)) + 1.0/6*rho_in*ux;
 
+        ux = 1 - 1/(rho_out) * (fi_new(Nx-1,j,0) + fi_new(Nx-1,j,2) + fi_new(Nx-1,j,4)
+                                 + 2*(fi_new(Nx-1,j,1) + fi_new(Nx-1,j,5) + fi_new(Nx-1,j,8)) );
+        fi_new(Nx-1,j,3) = fi_new(Nx-1,j,1) + 2/3*rho_out*ux;
+        fi_new(Nx-1,j,6) = fi_new(Nx-1,j,5) - 0.5*(fi_new(Nx-1,j,2) - fi_new(Nx-1,j,4)) + 1.0/6*rho_out*ux;
+        fi_new(Nx-1,j,7) = fi_new(Nx-1,j,8) + 0.5*(fi_new(Nx-1,j,2) - fi_new(Nx-1,j,4)) + 1.0/6*rho_out*ux;
+
         //rho(0,j) = rho_wall;
     }
     
+    for (int i = 1; i < Nx-1; i++) {
+        fi_new(i,1,2) = fi_new(i,0,4);
+        fi_new(i,1,5) = fi_new(i-1,0,7);
+        fi_new(i,1,6) = fi_new(i+1,0,8);
+        fi_new(i,0,4) = wi[4]; 
+        fi_new(i,0,7) = wi[7]; 
+        fi_new(i,0,8) = wi[8]; 
+
+        fi_new(i,Ny-2,4) = fi_new(i,Ny-1,2);
+        fi_new(i,Ny-2,7) = fi_new(i+1,Ny-1,5);
+        fi_new(i,Ny-2,8) = fi_new(i-1,Ny-1,6);
+        fi_new(i,Ny-1,2) = wi[2]; 
+        fi_new(i,Ny-1,5) = wi[5]; 
+        fi_new(i,Ny-1,6) = wi[6]; 
+    }
     // copy xmax to xmin, xmin to xmax
     
     fi = fi_new;
